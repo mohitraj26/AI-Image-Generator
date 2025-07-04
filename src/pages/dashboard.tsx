@@ -7,6 +7,42 @@ type GeneratedImage = {
   prompt: string;
 };
 
+const HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
+
+
+async function query(data: any): Promise<string> {
+  const response = await fetch(
+    "https://router.huggingface.co/together/v1/images/generations",
+    {
+      headers: {
+        Authorization: `Bearer ${HF_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const json = await response.json();
+  console.log("API response:", json);
+
+
+  // The image is usually in json.generated_image or similar depending on the model response format
+  const base64 = json.image || json.generated_image || json[0]?.image_base64;
+
+  if (!base64) {
+    throw new Error("No base64 image found in the response");
+  }
+
+  return `data:image/png;base64,${base64}`;
+}
+
+
+
 const Dashboard = () => {
   const [prompt, setPrompt] = useState<string>("");
   const [images, setImages] = useState<GeneratedImage[]>([]);
@@ -15,15 +51,14 @@ const Dashboard = () => {
 
   const handleGenerate = async () => {
     if (!prompt.trim()) return;
-
     setIsLoading(true);
 
     try {
-      // 🔁 MOCKED image generation (use actual API here later)
-      const imageUrl = `https://picsum.photos/seed/${encodeURIComponent(prompt)}/400/400`;
-
-      // simulate delay
-      await new Promise((res) => setTimeout(res, 1000));
+      const imageUrl = await query({
+        prompt,
+        response_format: "base64", // required
+        model: "black-forest-labs/FLUX.1-dev",
+      });
 
       const newImage: GeneratedImage = {
         url: imageUrl,
@@ -33,6 +68,7 @@ const Dashboard = () => {
       setImages([newImage, ...images]);
       setPrompt("");
     } catch (error) {
+      console.error("Error generating image:", error);
       alert("Image generation failed!");
     } finally {
       setIsLoading(false);

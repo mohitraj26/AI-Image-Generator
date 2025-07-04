@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Palette, Zap, Download, Image, Keyboard, Sliders, Cloud, Brain, Brush, Facebook, Twitter, Instagram, Github } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
 
 interface Particle {
   id: number;
@@ -34,7 +36,6 @@ const ImaginAILanding: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({});
   const [particles, setParticles] = useState<Particle[]>([]);
-
   // Sample AI-generated image examples
   const sampleImages: string[] = [
     "Fantasy crystal castle floating in purple clouds",
@@ -44,12 +45,12 @@ const ImaginAILanding: React.FC = () => {
   ];
 
   const showcaseImages: ShowcaseImage[] = [
-    { prompt: "Majestic dragon in ethereal mist", style: "Fantasy", image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=500&fit=crop" },
-    { prompt: "Neon-lit cyberpunk samurai", style: "Cyberpunk", image: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=500&h=500&fit=crop" },
-    { prompt: "Flowing liquid gold abstraction", style: "Abstract", image: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?w=500&h=500&fit=crop" },
+    { prompt: "Majestic dragon in ethereal mist", style: "Fantasy", image: "https://ideas.darden.virginia.edu/sites/default/files/styles/full_width_1024px_5_3_/public/2024-09/AI%20ART%20ITA.jpg?itok=CIaF2iIX" },
+    { prompt: "Neon-lit cyberpunk samurai", style: "Cyberpunk", image: "https://www.esparklearning.com/app/uploads/2024/04/Albert-Einstein-generated-by-AI-1024x683.webp" },
+    { prompt: "Flowing liquid gold abstraction", style: "Abstract", image: "https://news.ubc.ca/wp-content/uploads/2023/08/AdobeStock_559145847.jpeg" },
     { prompt: "Serene forest cathedral", style: "Photorealistic", image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=500&h=500&fit=crop" },
     { prompt: "Cosmic nebula with star formation", style: "Space Art", image: "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=500&h=500&fit=crop" },
-    { prompt: "Art deco cityscape at twilight", style: "Vintage", image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1f?w=500&h=500&fit=crop" }
+    { prompt: "Art deco cityscape at twilight", style: "Vintage", image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3ez6TFGptpmZRt7Cuyv3vfuCn294qY8MnnjpASG69ELO3vWFfcjfG_4PP8Y3rITFqjo4&usqp=CAU" }
   ];
 
   // Rotate hero images
@@ -126,7 +127,7 @@ const ImaginAILanding: React.FC = () => {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 px-6 py-4 backdrop-blur-md bg-slate-900/80 sticky top-0">
+      <header className=" z-10 px-6 py-4 backdrop-blur-md bg-slate-900/80 sticky top-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-2 group">
             <div className="relative">
@@ -146,9 +147,19 @@ const ImaginAILanding: React.FC = () => {
             ))}
           </nav>
           
-          <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-purple-500/25">
-            Try Now
-          </Button>
+          <div className='flex items-center space-x-4'>
+          <Link to="/login">
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-purple-500/25">
+              Login
+            </Button>
+          </Link>
+
+          <Link to="/signup">
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-purple-500/25">
+              Sign Up
+            </Button>
+          </Link>
+          </div>
         </div>
       </header>
 
@@ -179,9 +190,9 @@ const ImaginAILanding: React.FC = () => {
                 Generate Free Images →
                 <Zap className="ml-2 w-5 h-5 group-hover:animate-bounce" />
               </Button>
-              <Button size="lg" variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white text-lg px-8 py-6 transform hover:scale-105 transition-all duration-300">
+              {/* <Button size="lg" variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white text-lg px-8 py-6 transform hover:scale-105 transition-all duration-300">
                 See Live Demo
-              </Button>
+              </Button> */}
             </div>
           </div>
           
@@ -308,13 +319,13 @@ const ImaginAILanding: React.FC = () => {
               { icon: Cloud, title: "Download & Share", desc: "Get your masterpiece in seconds, ready to use" }
             ] as Step[]).map((step: Step, index: number) => (
               <div key={index} className="text-center group">
-                <div className="relative mb-6">
+                <div className="mb-6">
                   <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <step.icon className="w-10 h-10 text-white" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
+                  {/* <div className="absolute -top-10 -right-20 w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
                     {index + 1}
-                  </div>
+                  </div> */}
                   {index < 2 && (
                     <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 opacity-30"></div>
                   )}
