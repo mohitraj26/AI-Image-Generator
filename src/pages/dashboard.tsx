@@ -59,6 +59,7 @@ const Dashboard = () => {
         response_format: "base64", // required
         model: "black-forest-labs/FLUX.1-dev",
       });
+      console.log("Generated image URL:", imageUrl);
 
       const newImage: GeneratedImage = {
         url: imageUrl,
