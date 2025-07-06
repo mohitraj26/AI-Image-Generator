@@ -4,6 +4,9 @@ import Landing from "./pages/landing";
 import Login from "./pages/login";
 import Signup from "./pages/signup";
 import Dashboard from "./pages/dashboard";
+import HistoryPage from './pages/history';
+import CommunityPage from './pages/community';
+
 import { isAuthenticated } from "./utils/auth";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
@@ -19,6 +22,18 @@ const App = () => {
           path="/dashboard"
           element={
             isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/history"
+          element={
+            isAuthenticated() ? <HistoryPage /> : <Navigate to="/login" />
+          }
+        />
+        <Route
+          path="/community"
+          element={
+            isAuthenticated() ? <CommunityPage /> : <Navigate to="/login" />
           }
         />
       </Routes>
