@@ -100,7 +100,8 @@ const Dashboard = () => {
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `ai-image-${Date.now()}.jpg`;
+      const sanitizedPrompt = prompt.replace(/[^a-zA-Z0-9\s]/g, '').trim().replace(/\s+/g, '-').substring(0, 50);
+      link.download = `ai-image-${sanitizedPrompt || 'generated'}-${Date.now()}.jpg`; 
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

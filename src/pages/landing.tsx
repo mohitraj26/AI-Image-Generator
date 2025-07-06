@@ -59,7 +59,7 @@ const ImaginAILanding: React.FC = () => {
       setCurrentImageIndex((prev) => (prev + 1) % sampleImages.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [sampleImages.length]);
 
   // Initialize particles
   useEffect(() => {
@@ -100,11 +100,25 @@ const ImaginAILanding: React.FC = () => {
       { threshold: 0.1 }
     );
 
-    const elements = document.querySelectorAll('[data-animate]');
-    elements.forEach(el => observer.observe(el));
+    // Select elements by their IDs directly
+    const elementIdsToObserve = ['features', 'showcase', 'how-it-works'];
+    elementIdsToObserve.forEach(id => {
+      const element = document.getElementById(id);
+      if (element) {
+        observer.observe(element);
+      }
+    });
 
-    return () => observer.disconnect();
-  }, []);
+    return () => {
+      elementIdsToObserve.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+          observer.unobserve(element);
+        }
+      });
+      observer.disconnect();
+    };
+  }, []); // Empty dependency array, as these IDs are static
 
   return (
     <div className="min-h-screen bg-slate-900 text-white overflow-hidden">
@@ -183,6 +197,10 @@ const ImaginAILanding: React.FC = () => {
                 AI-powered image generation in seconds. No design skills needed.
                 Transform your imagination into stunning visuals with cutting-edge AI.
               </p>
+              {/* Display the rotating prompt here */}
+              <p className="text-xl text-slate-400 italic mt-4 animate-fade-in-out">
+                "{sampleImages[currentImageIndex]}"
+              </p>
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4">
@@ -190,9 +208,6 @@ const ImaginAILanding: React.FC = () => {
                 Generate Free Images →
                 <Zap className="ml-2 w-5 h-5 group-hover:animate-bounce" />
               </Button>
-              {/* <Button size="lg" variant="outline" className="border-purple-400 text-purple-400 hover:bg-purple-400 hover:text-white text-lg px-8 py-6 transform hover:scale-105 transition-all duration-300">
-                See Live Demo
-              </Button> */}
             </div>
           </div>
           
@@ -218,7 +233,13 @@ const ImaginAILanding: React.FC = () => {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="px-6 py-20" data-animate>
+      <section
+        id="features"
+        className={`px-6 py-20 transition-all duration-1000 ease-out transform ${
+          isVisible['features'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+        // Removed data-animate attribute here since we're selecting by ID
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -258,7 +279,13 @@ const ImaginAILanding: React.FC = () => {
       </section>
 
       {/* Showcase Gallery */}
-      <section id="showcase" className="px-6 py-20 bg-slate-800/50" data-animate>
+      <section
+        id="showcase"
+        className={`px-6 py-20 bg-slate-800/50 transition-all duration-1000 ease-out transform ${
+          isVisible['showcase'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+        // Removed data-animate attribute here
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -298,7 +325,13 @@ const ImaginAILanding: React.FC = () => {
       </section>
 
       {/* How It Works */}
-      <section id="how-it-works" className="px-6 py-20" data-animate>
+      <section
+        id="how-it-works"
+        className={`px-6 py-20 transition-all duration-1000 ease-out transform ${
+          isVisible['how-it-works'] ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+        }`}
+        // Removed data-animate attribute here
+      >
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl lg:text-5xl font-bold mb-6">
@@ -323,11 +356,11 @@ const ImaginAILanding: React.FC = () => {
                   <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg">
                     <step.icon className="w-10 h-10 text-white" />
                   </div>
-                  {/* <div className="absolute -top-10 -right-20 w-8 h-8 bg-gradient-to-br from-pink-500 to-purple-500 rounded-full flex items-center justify-center text-sm font-bold shadow-lg">
-                    {index + 1}
-                  </div> */}
+                  {/* The horizontal line between steps. Added conditional styling for fade-in */}
                   {index < 2 && (
-                    <div className="hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 opacity-30"></div>
+                    <div className={`hidden md:block absolute top-10 left-full w-full h-0.5 bg-gradient-to-r from-purple-600 to-pink-600 opacity-30 transition-all duration-1000 ease-out ${
+                      isVisible['how-it-works'] ? 'opacity-100' : 'opacity-0'
+                    }`}></div>
                   )}
                 </div>
                 <h3 className="text-xl font-semibold mb-3 group-hover:text-purple-400 transition-colors duration-300">
@@ -376,6 +409,13 @@ const ImaginAILanding: React.FC = () => {
         @keyframes twinkle {
           0% { opacity: 0.2; }
           100% { opacity: 0.8; }
+        }
+        @keyframes fadeInOut {
+          0%, 100% { opacity: 0; }
+          10%, 90% { opacity: 1; }
+        }
+        .animate-fade-in-out {
+          animation: fadeInOut 3s infinite; /* Matches your interval of 3000ms */
         }
       `}</style>
     </div>
