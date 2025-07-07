@@ -181,9 +181,6 @@ const Dashboard = () => {
   };
 
   return (
-    // The outermost div will now rely on global Tailwind dark mode classes,
-    // which ModeToggle should manage (e.g., 'dark' class on <html>).
-    // Ensure your tailwind.config.js is set up for dark mode with 'class' strategy.
     <div className="min-h-screen transition-colors duration-300 bg-slate-50 text-slate-950 dark:bg-slate-950 dark:text-slate-50">
       {/* Navbar */}
       <nav className="border-b transition-colors duration-300 border-slate-200 bg-white/50 backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/50">
